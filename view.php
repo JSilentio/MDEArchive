@@ -142,7 +142,7 @@ function processPost(post) {
       var timeago = timeSince(subtime);
 
       if(thumb === 'default' || thumb === 'nsfw' || thumb === '') {
-        thumb = null;
+        thumb = '';
       }
 
       if (thumb.length > 0 && thumb != 'self') {
