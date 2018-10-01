@@ -3,17 +3,16 @@
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html">
   <title>MDE</title>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-  <body>
+  <body style="margin:5; padding:5">
     <div id="content"></div>
   </body>
 </html>
 <style>
-.body{
-  font-family: Helvetica;
-  font-size: 11pt;
-}
 .wrapper{
   padding: 10px;
   display: flex;
@@ -22,8 +21,8 @@
 .comment{
   width: 100%;
   border: 1px #666 solid;
-  margin: 10px;
-  min-height: 100px;
+  margin: 5px;
+  min-height: 10px;
   background-color: #ddd;
 }
 .reply{
@@ -166,7 +165,7 @@ function addComment(comment, recursionLevel){
         var author    = obj.author;
 
         html += '<div class="wrapper">\n';
-        html += '<div class="body"><div class="score"><div class="updoots"></div>'+score+'</div><b>'+author+'</b>:<br>'+body+'\n</div>';
+        html += '<div class="body"><div class="score"><div class="updoots"></div>'+score+'</div><a href="https://www.reddit.com/user/'+author+'"><b>'+author+'</b></a>:<br>'+body+'\n</div>';
 
         $.each(comment['data']['replies'], function(key2, replies) {
             $.each(replies['children'], function(key3, reply){
