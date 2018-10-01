@@ -47,6 +47,13 @@
   width: 30px;
   height: 20px;
 }
+.selfPost{
+  border: 1px solid #999;
+  padding: 10px;
+}
+.link{
+  text-decoration: none;
+}
 </style>
 <script>
 
@@ -134,13 +141,36 @@ function processPost(post) {
 
       var timeago = timeSince(subtime);
 
-      if(obj.thumbnail === 'default' || obj.thumbnail === 'nsfw' || obj.thumbnail === '')
-        thumb = 'img/default-thumb.png';
+      if(thumb === 'default' || thumb === 'nsfw' || thumb === '') {
+        thumb = null;
+      }
 
-      html += '<img src="'+thumb+'" class="thumbimg">\n';
+      if (thumb.length > 0 && thumb != 'self') {
+        if(obj.url){
+          html += '<a class="link" href="' + obj.url + '">';
+        }
+        html += '<img src="'+thumb+'" class="thumbimg">\n';
+        if(obj.url){
+          html += '</a>';
+        }
+      }
+
+      if(obj.url){
+        html += '<a class="link" href="' + obj.url + '">';
+      }
+
       html += '<div class="linkdetails"><h2>'+title+'</h2>\n';
       html += '    <p class="subrdt">posted to <a href="'+subrdturl+'" target="_blank">'+subrdt+'</a> '+timeago+'</p>';
       html += '</div>';
+
+      if(obj.url){
+        html += '</a>';
+      }
+
+      if (obj.is_self){
+        html += '<div class="selfPost">'+obj.selftext+'</div>';
+      }
+
     }
   htmlOutput(html);
 }

@@ -64,12 +64,6 @@ $( document ).ready(function() {
   var sortField = '<?php echo $sortField; ?>';
   var sortDirection = '<?php echo $sortDirection; ?>';
 
-  // if(sortDirection == 'asc') {
-  //   sortDirection = 'desc';
-  // } else {
-  //   sortDirection = 'asc';
-  // }
-
   var sortForm = $('<form action="" method="post">' +
     '<input type="hidden" id="sortField" name="sortField" value="" />' +
     '<input type="hidden" id="sortDirection" name="sortDirection" value="" />' +
@@ -197,6 +191,6 @@ $( document ).ready(function() {
       ?>
       </table>
     </div>
-  </row>
+  </div>
 </body>
 </html>
