@@ -4,8 +4,8 @@ class Db {
 
   private $conn;
   private $server = 'localhost';
-  private $user = 'root';
-  private $pass = 'rkma89yd!';
+  private $user = 'mde';
+  private $pass = 'YUdoDis???';
   private $db = 'mde_archive';
 
   function __construct() {
@@ -30,7 +30,6 @@ class Db {
   function searchPosts($field, $searchString, $page = 1) {
     $page = ($page -1) * 100;
     $sql = "SELECT * FROM posts WHERE ". $field ." LIKE '%". $searchString ."%' LIMIT 100 OFFSET ".$page.";";
-    echo $sql;
     $query = mysqli_query($this->conn, $sql);
     if($query) {
       $result = [];
