@@ -54,6 +54,9 @@
 .link{
   text-decoration: none;
 }
+a {
+  text-decoration: none;
+}
 </style>
 <script>
 
@@ -138,6 +141,7 @@ function processPost(post) {
       var redditurl = "http://www.reddit.com"+obj.permalink;
       var subrdturl = "http://www.reddit.com/r/"+obj.subreddit+"/";
       var exturl    = obj.url;
+      var author    = obj.author;
 
       var timeago = timeSince(subtime);
 
@@ -160,12 +164,12 @@ function processPost(post) {
       }
 
       html += '<div class="linkdetails"><h2>'+title+'</h2>\n';
-      html += '    <p class="subrdt">posted to <a href="'+subrdturl+'" target="_blank">'+subrdt+'</a> '+timeago+'</p>';
-      html += '</div>';
-
       if(obj.url){
         html += '</a>';
       }
+      html += '    <p class="subrdt">posted to <a href="'+subrdturl+'" target="_blank">'+subrdt+'</a> '+timeago+' by <a href="https://www.reddit.com/user/'+author+'">'+author+'</a></p>';
+      html += '</div>';
+
 
       if (obj.is_self){
         html += '<div class="selfPost">'+obj.selftext+'</div>';

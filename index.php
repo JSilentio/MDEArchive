@@ -51,6 +51,10 @@
     cursor: pointer;
     min-width: 95px;
   }
+  table {
+    max-width: none;
+    word-break: break-word;
+  }
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -95,101 +99,106 @@ $( document ).ready(function() {
 </script>
 </head>
 <body>
+  <div class="container-fluid">
 
-  <form id="search" class="form-inline pull-right" action="" method="POST" style="margin-right: 25px;">
-      <input name="username" class="form-control form-control-md" type="text" placeholder="OP User Name" aria-label="OP User Name">
-      <input name="title" class="form-control form-control-md" type="text" placeholder="Post Title" aria-label="Post Title">
-      <button type="submit" class="btn btn-success"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
-  </form>
+    <form id="search" class="form-inline pull-right" action="" method="POST" style="margin-right: 25px;">
+        <input name="username" class="form-control form-control-md" type="text" placeholder="OP User Name" aria-label="OP User Name">
+        <input name="title" class="form-control form-control-md" type="text" placeholder="Post Title" aria-label="Post Title">
+        <button type="submit" class="btn btn-success"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+    </form>
 
-  <?php
-    if(count($data) == 100) {
-  ?>
-    <ul class="pagination justify-content-center">
-      <li class="page-item">
-      <a class="page-link" aria-label="First">
-        <span aria-hidden="true">&laquo;</span>
-        <span class="sr-only">Previous</span>
-      </a>
-    </li>
     <?php
-        if($page <= 5) {
-          for ($i=1; $i<=10+$page; $i++) {
-            if ($i == $page) {
-              echo "<li class='page-item active' page=".$i."><a>".$i."</a></li>";
-            } else {
-              echo "<li class='page-item' page=".$i."><a>".$i."</a></li>";
-            }
-          }
-        } else {
-          for ($i=$page-5; $i<=5+$page; $i++) {
-            if ($i == $page) {
-              echo "<li class='page-item active' page=".$i."><a>".$i."</a></li>";
-            } else {
-              echo "<li class='page-item' page=".$i."><a>".$i."</a></li>";
-            }
-          }
-        }
-      ?>
-      <li class="page-item">
-        <a class="page-link" aria-label="Last">
-          <span aria-hidden="true">&raquo;</span>
-          <span class="sr-only">Next</span>
+      if(count($data) == 100) {
+    ?>
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+        <a class="page-link" aria-label="First">
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only">Previous</span>
         </a>
       </li>
-    </ul>
-  <?php
-    }
-  ?>
-
-
-  <?php
-    if(count($data) < 1) {
-      $data = $db->listPosts();
-  ?>
-    <div class="alert alert-info">
-      Search returned no results.
-    </div>
-  <?php
-    }
-  ?>
-
-  <div class="row" style="padding: 30px;">
-    <div class="col col-md-12" style="width: 100%;">
-      <table class="table table-striped" style="width:99%;">
-        <tr>
-          <th id="score" class="sortable">Upvotes <i class="fa fa-sort" aria-hidden="true"></i> </th>
-          <th id="title">Title</th>
-          <th id="author">OP</th>
-          <th id="date" class="sortable">Date <i class="fa fa-sort" aria-hidden="true"></i> </th>
-        </tr>
       <?php
-        foreach($data as $post) {
-          $date = strtotime($post['date']);
-          $displayDate = date('jS F Y', $date);
-      ?>
+          if($page <= 5) {
+            for ($i=1; $i<=10+$page; $i++) {
+              if ($i == $page) {
+                echo "<li class='page-item active' page=".$i."><a>".$i."</a></li>";
+              } else {
+                echo "<li class='page-item' page=".$i."><a>".$i."</a></li>";
+              }
+            }
+          } else {
+            for ($i=$page-5; $i<=5+$page; $i++) {
+              if ($i == $page) {
+                echo "<li class='page-item active' page=".$i."><a>".$i."</a></li>";
+              } else {
+                echo "<li class='page-item' page=".$i."><a>".$i."</a></li>";
+              }
+            }
+          }
+        ?>
+        <li class="page-item">
+          <a class="page-link" aria-label="Last">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    <?php
+      }
+    ?>
+
+
+    <?php
+      if(count($data) < 1) {
+        $data = $db->listPosts();
+    ?>
+      <div class="alert alert-info">
+        Search returned no results.
+      </div>
+    <?php
+      }
+    ?>
+    <div class="row-fluid" style="padding: 30px;">
+      <div class="col col-md-12">
+        <table class="table table-striped">
           <tr>
-            <td class="score">
-              <div class="updoots"></div>
-              <span class="badge badge-secondary right"><?php echo $post['score']?></span>
-              <div class="downdoots"></div>
-            </td>
-            <td class="listing">
-              <a href="view.php?file=<?php echo $post['filename']; ?>">
-                <?php echo $post['title']; ?>
-              </a>
-            </td>
-            <td class="listing">
-              <a href="https://www.reddit.com/user/<?php echo $post['author']; ?>">
-                <?php echo $post['author']; ?>
-              </a>
-            </td>
-            <td class="listing"><?php echo $displayDate; ?></td>
+            <th id="score" class="sortable">Upvotes <i class="fa fa-sort" aria-hidden="true"></i> </th>
+            <th id="title"></th>
+            <th id="replies">Title</th>
+            <th id="author">OP</th>
+            <th id="date" class="sortable">Date <i class="fa fa-sort" aria-hidden="true"></i> </th>
           </tr>
-      <?php
-        }
-      ?>
-      </table>
+        <?php
+          foreach($data as $post) {
+            $date = strtotime($post['date']);
+            $displayDate = date('jS F Y', $date);
+        ?>
+            <tr>
+              <td class="score">
+                <div class="updoots"></div>
+                <span class="badge badge-secondary right"><?php echo $post['score']?></span>
+                <div class="downdoots"></div>
+              </td>
+              <td class="listing" style="font-size: 8pt;">
+                <?php echo $post['reply_count']; ?> comments
+              </td>
+              <td class="listing" style="max-width:800px; word-wrap:break-all; overflow:hidden;">
+                <a href="view.php?file=<?php echo $post['filename']; ?>">
+                  <?php echo $post['title']; ?>
+                </a>
+              </td>
+              <td class="listing">
+                <a href="https://www.reddit.com/user/<?php echo $post['author']; ?>">
+                  <?php echo $post['author']; ?>
+                </a>
+              </td>
+              <td class="listing"><?php echo $displayDate; ?></td>
+            </tr>
+        <?php
+          }
+        ?>
+        </table>
+      </div>
     </div>
   </div>
 </body>
