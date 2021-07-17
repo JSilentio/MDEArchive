@@ -172,7 +172,7 @@ function processPost(post) {
 
 
       if (obj.is_self){
-        html += '<div class="selfPost">'+obj.selftext+'</div>';
+        html += '<div class="selfPost">'+obj.selftext.replace(/&amp;/g, '\&').replace(/\n\n/g, '\n').replace(/\n/g, '<br>')+'</div>';
       }
 
     }
@@ -193,9 +193,9 @@ function addComment(comment, recursionLevel){
 
   var obj = comment['data'];
 
-  if(obj.body != "") {
+  if(obj.body != "" && typeof(obj.body) !== "undefined") {
         var score     = obj.score;
-        var body      = obj.body;
+        var body      = obj.body.replace(/&amp;/g, '\&').replace(/\n\n/g, '\n').replace(/\n/g, '<br>');
         var author    = obj.author;
 
         html += '<div class="wrapper">\n';
