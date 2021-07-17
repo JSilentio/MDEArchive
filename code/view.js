@@ -1,20 +1,18 @@
-
 <html lang="en-US">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html">
   <title>MDE</title>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-  <body>
+  <body style="margin:5; padding:5">
     <div id="content"></div>
   </body>
 </html>
 <style>
-.body{
-  font-family: Helvetica;
-  font-size: 11pt;
-}
 .wrapper{
   padding: 10px;
   display: flex;
@@ -23,8 +21,8 @@
 .comment{
   width: 100%;
   border: 1px #666 solid;
-  margin: 10px;
-  min-height: 100px;
+  margin: 5px;
+  min-height: 10px;
   background-color: #ddd;
 }
 .reply{
@@ -49,8 +47,38 @@
   width: 30px;
   height: 20px;
 }
+.selfPost{
+  border: 1px solid #999;
+  padding: 10px;
+}
+.link{
+  text-decoration: none;
+}
+a {
+  text-decoration: none;
+}
 </style>
 <script>
+
+<?php
+  if(!empty($_GET['file'])){
+?>
+  jsonFile = 'data/<?php echo $_GET['file']; ?>';
+<?php
+  }
+?>
+
+$( document ).ready(function() {
+
+  $.ajax({
+    dataType: "json",
+    url: jsonFile,
+    success: function(result){
+      run(result);
+    }
+  });
+
+});
 
 function htmlOutput(html) {
 
@@ -113,16 +141,40 @@ function processPost(post) {
       var redditurl = "http://www.reddit.com"+obj.permalink;
       var subrdturl = "http://www.reddit.com/r/"+obj.subreddit+"/";
       var exturl    = obj.url;
+      var author    = obj.author;
 
       var timeago = timeSince(subtime);
 
-      if(obj.thumbnail === 'default' || obj.thumbnail === 'nsfw' || obj.thumbnail === '')
-        thumb = 'img/default-thumb.png';
+      if(thumb === 'default' || thumb === 'nsfw' || thumb === '') {
+        thumb = '';
+      }
 
-      html += '<img src="'+thumb+'" class="thumbimg">\n';
+      if (thumb.length > 0 && thumb != 'self') {
+        if(obj.url){
+          html += '<a class="link" href="' + obj.url + '">';
+        }
+        html += '<img src="'+thumb+'" class="thumbimg">\n';
+        if(obj.url){
+          html += '</a>';
+        }
+      }
+
+      if(obj.url){
+        html += '<a class="link" href="' + obj.url + '">';
+      }
+
       html += '<div class="linkdetails"><h2>'+title+'</h2>\n';
-      html += '    <p class="subrdt">posted to <a href="'+subrdturl+'" target="_blank">'+subrdt+'</a> '+timeago+'</p>';
+      if(obj.url){
+        html += '</a>';
+      }
+      html += '    <p class="subrdt">posted to <a href="'+subrdturl+'" target="_blank">'+subrdt+'</a> '+timeago+' by <a href="https://www.reddit.com/user/'+author+'">'+author+'</a></p>';
       html += '</div>';
+
+
+      if (obj.is_self){
+        html += '<div class="selfPost">'+obj.selftext.replace(/&amp;/g, '\&').replace(/\n\n/g, '\n').replace(/\n/g, '<br>')+'</div>';
+      }
+
     }
   htmlOutput(html);
 }
@@ -141,13 +193,13 @@ function addComment(comment, recursionLevel){
 
   var obj = comment['data'];
 
-  if(obj.body != "") {
+  if(obj.body != "" && typeof(obj.body) !== "undefined") {
         var score     = obj.score;
-        var body      = obj.body;
+        var body      = obj.body.replace(/&amp;/g, '\&').replace(/\n\n/g, '\n').replace(/\n/g, '<br>');
         var author    = obj.author;
 
         html += '<div class="wrapper">\n';
-        html += '<div class="body"><div class="score"><div class="updoots"></div>'+score+'</div><b>'+author+'</b>:<br>'+body+'\n</div>';
+        html += '<div class="body"><div class="score"><div class="updoots"></div>'+score+'</div><a href="https://www.reddit.com/user/'+author+'"><b>'+author+'</b></a>:<br>'+body+'\n</div>';
 
         $.each(comment['data']['replies'], function(key2, replies) {
             $.each(replies['children'], function(key3, reply){
@@ -174,11 +226,10 @@ function addComment(comment, recursionLevel){
     }
 }
 
-function run() {
+function run(json) {
 
   processPost(json);
   processComments(json);
 
 }
 </script>
-
