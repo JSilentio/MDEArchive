@@ -57,6 +57,37 @@ class Db {
     }
   }
 
+  function searchComments($username, $comment, $page = 1) {
+    $page = ($page -1) * 100;
+
+    $usernameSearch = "";
+    $commentSearch = "";
+
+    if(!empty(trim($username))) {
+      $usernameSearch = " AND username LIKE '%". $username ."%' ";
+    }
+
+    if(!empty(trim($comment))) {
+      $commentSearch = " AND comment LIKE '%". $comment ."%' ";
+    }
+
+
+    $sql = "SELECT pr.*, p.title, p.date, p.filename FROM post_replies pr JOIN posts p on pr.post_id = p.id WHERE 1=1 ".$usernameSearch.$commentSearch." LIMIT 100 OFFSET ".$page.";";
+    echo $sql;
+    $query = mysqli_query($this->conn, $sql);
+    if($query) {
+      $result = [];
+      while ($row = $query->fetch_assoc()) {
+        $result[] = $row;
+      }
+      return $result;
+    } else {
+      return [];
+    }
+  }
+
+
 }
 
 ?>
+
